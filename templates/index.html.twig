@@ -1,0 +1,28 @@
+{% extends "base.html.twig" %}
+{% block title %}Startpage{% endblock %}
+{% block body %}
+    <h1>Admin console</h1>
+    <div >
+        <table>
+            <tr>
+                <th>Usernames</th>
+            </tr>
+            {% for key,value in usernames %}
+                <tr>
+                    <th style="font-weight:normal;"><a href="http://social-ims.alpha-lab.net/profile/{{value}}">{{ value }}</a></th>
+                </tr>
+            {% endfor %}
+        </table>
+        <br/>
+        <table>
+            <tr>
+                <th>Posts</th>
+            </tr>
+            {% for key,value in posts %}
+                <tr>
+                    <th style="font-weight:normal;"><a href="http://social-ims.alpha-lab.net/post/{{value[1]}}">{{ value[0] }}</a></th>
+                </tr>
+            {% endfor %}
+        </table>
+    </div>
+{% endblock %}
