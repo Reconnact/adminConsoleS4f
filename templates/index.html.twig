@@ -1,28 +1,36 @@
 {% extends "base.html.twig" %}
 {% block title %}Startpage{% endblock %}
+{% block javascript %}
+    <script src="{{ asset('/js/links.js') }}" type="text/javascript"></script>
+{% endblock %}
 {% block body %}
     <h1>Admin console</h1>
-    <div >
+    <div id="toc_container">
+        <h2 class="toc_title">Contents</h2>
+        <ul class="toc_list">
+            {% for key, table in data %}
+                <li><a href="#{{table["tablename"]}}">{{table["tablename"]}}</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+    <div>
+    {% for key, table in data %}
+        <h3 id={{table["tablename"]}}>{{table["tablename"]}}</h3>
         <table>
-            <tr>
-                <th>Usernames</th>
-            </tr>
-            {% for key,value in usernames %}
-                <tr>
-                    <th style="font-weight:normal;"><a href="http://social-ims.alpha-lab.net/profile/{{value}}">{{ value }}</a></th>
+            <thead>
+                {% for key, columnTitle in table["columnTitle"] %}
+                    <th>{{ columnTitle }}</th>
+                {% endfor %}
+            </thead>
+            {% for key, rowData in table["rowData"] %}
+                <tr class="clickable" onClick="openPage('/profile/' + '{{rowData[1]}}')">
+                {% for key2, cellValue in rowData %}
+                    <th>{{ cellValue }}</th>
+                {% endfor %}
                 </tr>
             {% endfor %}
-        </table>
-        <br/>
-        <table>
-            <tr>
-                <th>Posts</th>
-            </tr>
-            {% for key,value in posts %}
-                <tr>
-                    <th style="font-weight:normal;"><a href="http://social-ims.alpha-lab.net/post/{{value[1]}}">{{ value[0] }}</a></th>
-                </tr>
-            {% endfor %}
-        </table>
+        </table>   
+    {% endfor %}    
     </div>
 {% endblock %}
+

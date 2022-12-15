@@ -67,7 +67,7 @@ class Profile
     /**
      * @var string|null
      *
-     * @ORM\Column(name="img", type="text", length=65535, nullable=true)
+     * @ORM\Column(name="img", type="blob", length=0, nullable=true)
      */
     private $img;
 
@@ -148,12 +148,12 @@ class Profile
         return $this;
     }
 
-    public function getImg(): ?string
+    public function getImg()
     {
         return $this->img;
     }
 
-    public function setImg(?string $img): self
+    public function setImg($img): self
     {
         $this->img = $img;
 

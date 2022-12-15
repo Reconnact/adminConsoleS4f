@@ -1,12 +1,9 @@
 <?php
 
 namespace App\Entity;
-use App\Entity\Profile;
 
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
-use phpDocumentor\Reflection\Types\Integer;
-use Symfony\Component\BrowserKit\Response;
 
 /**
  * Post
@@ -45,13 +42,6 @@ class Post
      * @ORM\Column(name="date", type="datetime", nullable=false, options={"default"="CURRENT_TIMESTAMP"})
      */
     private $date = 'CURRENT_TIMESTAMP';
-
-    /**
-     * @var int|null
-     *
-     * @ORM\Column(name="likes", type="integer", nullable=true)
-     */
-    private $likes = '0';
 
     /**
      * @var \Profile
@@ -100,18 +90,6 @@ class Post
     public function setDate(\DateTimeInterface $date): self
     {
         $this->date = $date;
-
-        return $this;
-    }
-
-    public function getLikes(): ?int
-    {
-        return $this->likes;
-    }
-
-    public function setLikes(?int $likes): self
-    {
-        $this->likes = $likes;
 
         return $this;
     }
