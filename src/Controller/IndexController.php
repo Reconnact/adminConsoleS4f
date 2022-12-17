@@ -7,9 +7,10 @@ namespace App\Controller;
 use App\Entity\Followers;
 use App\Entity\Profile;
 use App\Entity\Post;
+use App\Entity\Comments;
+
 
 use Doctrine\Persistence\ManagerRegistry;
-use phpDocumentor\Reflection\Types\Integer;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
@@ -21,13 +22,7 @@ class IndexController extends AbstractController
         //Get data from database
         $users = $doctrine->getRepository(profile::class)->findAll(\Doctrine\ORM\Query::HYDRATE_ARRAY);
         $posts = $doctrine->getRepository(post::class)->findAll(\Doctrine\ORM\Query::HYDRATE_ARRAY);
-        
-        //Check if data was received
-        if (!$users) {
-            throw $this->createNotFoundException(
-                'No data found'
-            );
-        }
+        $comments = $doctrine->getRepository(comments::class)->findAll(\Doctrine\ORM\Query::HYDRATE_ARRAY);
 
         //Prepare user-table data
         $userObjects = [count($users)];
@@ -39,19 +34,30 @@ class IndexController extends AbstractController
         $userData = [
         'tablename' => "Users", 
         'columnTitle' => ["Profile ID", "Usernames", "First name", "Last name", "E-Mail", "Followers", "Following", "Posts"],
-        'rowData' => $userObjects];
+        'rowData' => $userObjects,
+        'edit' => "/profile/"];
 
         //Prepare post-table data
         $postObjects = [count($posts)];
         for ($i=0; $i < count($posts); $i++) { 
-            $postObjects[$i] = [$posts[$i]->getPostid(), $posts[$i]->getTitle(),  $posts[$i]->getProfileid()->getUsername()];
+            $postObjects[$i] = [$posts[$i]->getPostid(), $posts[$i]->getTitle(),  $posts[$i]->getProfileid()->getUsername(), date_format($posts[$i]->getDate(), 'Y-m-d H:i:s')];
         }
         $postData = [
         'tablename' => "Post", 
-        'columnTitle' => ["Post ID", "Post", "Username"],
+        'columnTitle' => ["Post ID", "Post", "Username", "Date"],
         'rowData' => $postObjects];
 
-        $data = [$userData, $postData];
+        //Prepare comment-table data
+        $commentObjects = [count($comments)];
+        for ($i=0; $i < count($comments); $i++) { 
+            $commentObjects[$i] = [$comments[$i]->getCommentid(), $comments[$i]->getComment(), $comments[$i]->getProfileid()->getUsername(), $comments[$i]->getPostid()->getTitle(), date_format($comments[$i]->getCommentdate(), 'Y-m-d H:i:s')];
+        }
+        $commentData = [
+        'tablename' => "Comments", 
+        'columnTitle' => ["Comment ID", "Comment", "Username", "Post", "Date"],
+        'rowData' => $commentObjects];
+
+        $data = [$userData, $postData, $commentData];
 
         //Return the HTML-page
         return $this->render('index.html.twig', [

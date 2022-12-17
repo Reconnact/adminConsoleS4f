@@ -1,0 +1,17 @@
+{% extends "base.html.twig" %}
+{% block title %}Profile | {{ data[1] }}{% endblock %}
+{% block body %}
+    <h1>{{ data[1] }} (#{{ data[0] }})</h1>
+    {% for key, value in data[2] %}
+        {% if value is iterable %}
+            <div><h3>{{ key }}: </h3>
+            {% for key, string in value %}
+                <li>{{ string }}</li>
+            {% endfor %}
+            </div>
+        {% else %}
+            <div><h3>{{ key }}: </h3><p> {{ value }}</p></div>
+        {% endif %}
+    {% endfor %}
+{% endblock %}
+

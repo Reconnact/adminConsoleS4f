@@ -1,8 +1,5 @@
 {% extends "base.html.twig" %}
 {% block title %}Startpage{% endblock %}
-{% block javascript %}
-    <script src="{{ asset('/js/links.js') }}" type="text/javascript"></script>
-{% endblock %}
 {% block body %}
     <h1>Admin console</h1>
     <div id="toc_container">
@@ -23,7 +20,9 @@
                 {% endfor %}
             </thead>
             {% for key, rowData in table["rowData"] %}
-                <tr class="clickable" onClick="openPage('/profile/' + '{{rowData[1]}}')">
+                {% if table["edit"] is defined %}
+                    <tr class="clickable" onClick="openPage('{{table['edit']}}' + '{{rowData[0]}}')">
+                {% endif %}
                 {% for key2, cellValue in rowData %}
                     <th>{{ cellValue }}</th>
                 {% endfor %}
