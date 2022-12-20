@@ -1,7 +1,6 @@
 {% extends "base.html.twig" %}
 {% block title %}Startpage{% endblock %}
 {% block body %}
-    <h1>Admin console</h1>
     <div id="toc_container">
         <h2 class="toc_title">Contents</h2>
         <ul class="toc_list">
@@ -21,7 +20,7 @@
             </thead>
             {% for key, rowData in table["rowData"] %}
                 {% if table["edit"] is defined %}
-                    <tr class="clickable" onClick="openPage('{{table['edit']}}' + '{{rowData[0]}}')">
+                    <tr class="clickable" onClick="window.location.href = '{{table['edit']}}' + '{{rowData[0]}}'">
                 {% endif %}
                 {% for key2, cellValue in rowData %}
                     <th>{{ cellValue }}</th>

@@ -2,6 +2,40 @@ html {
     background-color: white;
 }
 
+main {
+    margin-left: 5%;
+    margin-right: 5%;
+}
+
+footer p {
+    text-align: center;
+}
+
+a {
+    text-decoration: none;
+    color: #000;
+}
+
+.site-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    height: 100px;
+    border-bottom: 1px solid #ccc;
+    margin-bottom: 1%;
+}
+
+
+.site-identity h1 {
+    font-size: 1.5em;
+    display: inline-block;
+}
+
+nav > div {
+    width: 20%;
+}
+
 table {
     border-collapse: collapse;
     margin: 25px 0;
@@ -58,3 +92,36 @@ table tbody tr:last-of-type {
     padding: 0;
 }
 
+button {
+    border: none; 
+    padding: 0.5%; 
+    background-color: #4285f4; 
+    text-align: center; 
+    cursor: pointer;
+    border-radius: 0.25rem; 
+    color: white;
+}
+
+.deleteBtn {
+    background-color: #f44263;
+}
+
+input {
+    border:2px solid #aaa;
+    border-radius:4px;
+    margin:8px 0;
+    outline:none;
+    padding:8px;
+    box-sizing:border-box;
+    transition:.3s;
+}
+
+.data {
+    width: 50%;
+    padding-right: 2.5%;
+}
+
+.stats {
+    width: 50%;
+    padding-left: 2.5%;
+}

@@ -45,7 +45,8 @@ class IndexController extends AbstractController
         $postData = [
         'tablename' => "Post", 
         'columnTitle' => ["Post ID", "Post", "Username", "Date"],
-        'rowData' => $postObjects];
+        'rowData' => $postObjects,
+        'edit' => "/post/"];
 
         //Prepare comment-table data
         $commentObjects = [count($comments)];
@@ -55,7 +56,8 @@ class IndexController extends AbstractController
         $commentData = [
         'tablename' => "Comments", 
         'columnTitle' => ["Comment ID", "Comment", "Username", "Post", "Date"],
-        'rowData' => $commentObjects];
+        'rowData' => $commentObjects,
+        'edit' => "/comment/"];
 
         $data = [$userData, $postData, $commentData];
 

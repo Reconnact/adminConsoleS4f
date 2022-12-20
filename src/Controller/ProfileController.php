@@ -5,6 +5,7 @@ namespace App\Controller;
 // ...
 use App\Entity\Profile;
 use App\Entity\Followers;
+use App\Entity\Post;
 use Doctrine\Persistence\ManagerRegistry;
 use PhpParser\Node\Expr\Cast\Array_;
 use Symfony\Component\HttpFoundation\Response;
@@ -32,7 +33,9 @@ class ProfileController extends AbstractController
                         "E-Mail" => $users[$i]->getMail(),
                         "Bio" => $users[$i]->getBio(),
                         "Follower" => self::getFollower($doctrine, $id),
-                        "Following" => self::getFollowing($doctrine, $id)
+                        "Following" => self::getFollowing($doctrine, $id),
+                        "Posts" => self::getPosts($doctrine, $id)
+
                     ]
                 ];
             }
@@ -43,9 +46,25 @@ class ProfileController extends AbstractController
             return new Response("404");
         }
 
+        if (isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on')
+            $link = "https";
+        else $link = "http";
+
+        $link .= "://";
+        $link .= $_SERVER['HTTP_HOST'];
+        $link .= $_SERVER['REQUEST_URI'];
+        $url_components = parse_url($link);
+        $edit = false;
+        if (isset($url_components['query'])){
+        parse_str($url_components['query'], $params);
+        if (isset($params['action']) && $params['action'] == "edit"){
+            $edit = true;
+        }
+        }
         //Return the HTML-page
         return $this->render('profile.html.twig', [
-            'data' => $data
+            'data' => $data,
+            'edit' => $edit
         ]);
     }
 
@@ -69,5 +88,18 @@ class ProfileController extends AbstractController
             }
         }
         return $followerData;
+    }
+
+    public function getPosts(ManagerRegistry $doctrine, int $id) : array{
+        $posts = $doctrine->getRepository(Post::class)->findAll(\Doctrine\ORM\Query::HYDRATE_ARRAY);
+        $titles = ["Title", "Text", "Date"];
+        $post = [];
+        for ($i=0; $i < count($posts); $i++) { 
+            if ($posts[$i]->getProfileid()->getProfileid() === $id){
+                array_push($post, [$posts[$i]->getTitle(), $posts[$i]->getText(), date_format($posts[$i]->getDate(), 'Y-m-d H:i:s')]);
+            }
+        }
+        $postData = ["ColumnTitles" => $titles, "Data" => $post];
+        return $postData;
     }
 }

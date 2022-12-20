@@ -2,16 +2,80 @@
 {% block title %}Profile | {{ data[1] }}{% endblock %}
 {% block body %}
     <h1>{{ data[1] }} (#{{ data[0] }})</h1>
-    {% for key, value in data[2] %}
-        {% if value is iterable %}
-            <div><h3>{{ key }}: </h3>
-            {% for key, string in value %}
-                <li>{{ string }}</li>
+    <!--TODO-->
+    {% if edit == false %}
+        <button onClick="window.location.href = 'http://social-ims.alpha-lab.net/profile/{{ data[1] }}'">Visit</button> 
+        <button onClick="window.location.href = '?action=edit'">Edit</button> 
+        <button class="deleteBtn">Delete Account</button> 
+    {% else %}
+        <button onClick="">Save</button> 
+        <button class="deleteBtn" onClick="window.location.href = '?'">Cancel</button> 
+    {% endif %}
+    <!--END TODO-->
+    <div style="display: flex;">
+        <div class="data">
+            <h2>Data: </h2>
+            {% for key, value in data[2] %}
+                {% if value is iterable %}
+                    <div>
+                        <table>
+                            
+                                {% if value["ColumnTitles"] is defined %}
+                                        <h3>{{key}}:</h3>
+                                        <thead>
+                                        {% for key, columnTitle in value["ColumnTitles"] %}
+                                            <th>{{ columnTitle }}</th>
+                                        {% endfor %}
+                                {% else %}
+                                    <h3>{{key}}:</h3>
+                                    <thead>
+                                {% endif %}
+                                {% if edit == true %}
+                                    <th>Delete</th>
+                                {% endif %}
+                            </thead>
+                            {% if value["Data"] is defined %}
+                                {% if value["Data"] is iterable %}
+                                    {% for key, column in value["Data"] %}
+                                        <tr>
+                                            {% for key, string in column %}
+                                                <th>{{ string }}</th>
+                                            {% endfor %}
+                                        </tr>
+                                    {% endfor %}
+                                {% endif %}
+                            {% else %}
+                                {% for key, data in value %}
+                                    <tr>
+                                            <th>{{ data }}</th>
+                                            {% if edit == true %}
+                                                <th><button style="width: 100%; height: 100%;"><i class="fa fa-trash"></i></button></th>
+                                            {% endif %}
+                                        </tr>
+                                    {% endfor %}
+                             {% endif %}
+                    
+                        </table>
+                    </div>
+                {% else %}
+                    <div>
+                        <h3 style="margin-bottom: 0;">{{ key }}: </h3>
+                        {% if edit == false %}
+                            <p style="margin-top: 0;"> {{ value }} </p>
+                        {% elseif key == "Bio"%}
+                            <textarea>{{ value }}</textarea>
+                        {% else %}
+                            <input type='text' value="{{ value }}"/>
+                        {% endif %}
+                    </div>
+                {% endif %}
             {% endfor %}
-            </div>
-        {% else %}
-            <div><h3>{{ key }}: </h3><p> {{ value }}</p></div>
-        {% endif %}
-    {% endfor %}
+        </div>
+        <div class="stats">
+            <h2>Stats: </h2>
+        </div>
+    </div>
+
+
 {% endblock %}
 
