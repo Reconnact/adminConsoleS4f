@@ -12,19 +12,33 @@
     <div>
     {% for key, table in data %}
         <h3 id={{table["tablename"]}}>{{table["tablename"]}}</h3>
+        <!--TODO-->
+        {% if edit is defined and edit == table["tablename"] %}
+            <button onClick="">Save</button> 
+            <button class="deleteBtn" onClick="window.location.href = '?#{{table["tablename"]}}'">Cancel</button> 
+        {% else %}
+            <button onClick="window.location.href = '?edit={{table["tablename"]}}#{{table["tablename"]}}'">Edit</button> 
+        {% endif %}
+        <!--END TODO-->
         <table>
             <thead>
                 {% for key, columnTitle in table["columnTitle"] %}
                     <th>{{ columnTitle }}</th>
                 {% endfor %}
+                {% if edit == table["tablename"] %}
+                    <th>Delete</th>
+                {% endif %}
             </thead>
             {% for key, rowData in table["rowData"] %}
-                {% if table["edit"] is defined %}
-                    <tr class="clickable" onClick="window.location.href = '{{table['edit']}}' + '{{rowData[0]}}'">
+                {% if table["route"] is defined %}
+                    <tr {% if edit == null %} class="clickable"  onClick="window.location.href = '{{table['route']}}' + '{{rowData[0]}}'" {% endif %}>
                 {% endif %}
                 {% for key2, cellValue in rowData %}
                     <th>{{ cellValue }}</th>
                 {% endfor %}
+                {% if edit is defined and edit == table["tablename"] %}
+                    <th><button style="width: 100%; height: 100%;"><i class="fa fa-trash"></i></button></th>
+                {% endif %}
                 </tr>
             {% endfor %}
         </table>   
